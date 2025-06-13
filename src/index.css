@@ -1,3 +1,5 @@
+
+@import 'bootstrap/dist/css/bootstrap.min.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -100,4 +102,19 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* RTL Support */
+[dir="rtl"] .text-start {
+  text-align: right !important;
+}
+
+[dir="rtl"] .ms-3 {
+  margin-left: 0 !important;
+  margin-right: 1rem !important;
+}
+
+[dir="rtl"] .ms-md-3 {
+  margin-left: 0 !important;
+  margin-right: 1rem !important;
 }
