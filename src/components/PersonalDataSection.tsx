@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAppState } from '../contexts/AppStateContext';
+import ProgressBar from './ProgressBar';
 
 const PersonalDataSection = () => {
   const { t } = useLanguage();
@@ -25,9 +26,7 @@ const PersonalDataSection = () => {
           </a>
         </div>
 
-        <div className="progress mb-3" role="progressbar" aria-label="Basic example" aria-valuenow={25} aria-valuemin={0} aria-valuemax={100}>
-          <div className="progress-bar rounded" style={{ width: '25%' }}></div>
-        </div>
+        <ProgressBar />
 
         <form onSubmit={handleSubmit}>
           <div className="text-start mb-3">

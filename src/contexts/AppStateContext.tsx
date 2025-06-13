@@ -15,6 +15,7 @@ interface AppStateContextType {
   currentSection: Section;
   setCurrentSection: (section: Section) => void;
   nextSection: () => void;
+  getProgressPercentage: () => number;
 }
 
 const AppStateContext = createContext<AppStateContextType | undefined>(undefined);
@@ -52,8 +53,25 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
     }
   };
 
+  const getProgressPercentage = () => {
+    const currentIndex = sectionOrder.indexOf(currentSection);
+    // لا نعرض شريط التقدم في القسم الأول والأخير
+    if (currentIndex <= 1) return 0;
+    if (currentIndex >= sectionOrder.length - 1) return 100;
+    
+    // حساب النسبة للأقسام من personal-data إلى payment
+    const progressSections = sectionOrder.slice(3, 7); // personal-data, vehicle-information, service, payment
+    const progressIndex = progressSections.indexOf(currentSection);
+    return ((progressIndex + 1) / progressSections.length) * 100;
+  };
+
   return (
-    <AppStateContext.Provider value={{ currentSection, setCurrentSection, nextSection }}>
+    <AppStateContext.Provider value={{ 
+      currentSection, 
+      setCurrentSection, 
+      nextSection, 
+      getProgressPercentage 
+    }}>
       {children}
     </AppStateContext.Provider>
   );
