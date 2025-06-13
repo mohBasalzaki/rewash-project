@@ -40,7 +40,7 @@ const AppContent = () => {
       
       <Footer />
 
-      <style jsx>{`
+      <style>{`
         .otp-input {
           width: 100px;
           height: 100px;
