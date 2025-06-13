@@ -1,9 +1,15 @@
-
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAppState } from '../contexts/AppStateContext';
 
 const ServiceSection = () => {
   const { t } = useLanguage();
+  const { nextSection } = useAppState();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    nextSection();
+  };
 
   return (
     <section id="service-section" className="m-0">
@@ -23,7 +29,7 @@ const ServiceSection = () => {
           <div className="progress-bar rounded" style={{ width: '75%' }}></div>
         </div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="text-start mb-3">
             <label className="form-label">{t('serviceType')}</label>
             <select className="form-select" aria-label="Default select example">

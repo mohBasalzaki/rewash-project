@@ -1,9 +1,15 @@
-
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAppState } from '../contexts/AppStateContext';
 
 const PaymentSection = () => {
   const { t } = useLanguage();
+  const { nextSection } = useAppState();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    nextSection();
+  };
 
   return (
     <section id="payment-section" className="m-0">
@@ -23,7 +29,7 @@ const PaymentSection = () => {
           <div className="progress-bar rounded" style={{ width: '95%' }}></div>
         </div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="text-start mb-3">
             <label htmlFor="cardNumber" className="form-label">{t('cardNumber')}</label>
             <input 

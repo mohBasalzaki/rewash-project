@@ -1,10 +1,16 @@
-
 import React, { useEffect, useRef } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAppState } from '../contexts/AppStateContext';
 
 const OTPSection = () => {
   const { t } = useLanguage();
+  const { nextSection } = useAppState();
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    nextSection();
+  };
 
   useEffect(() => {
     const inputs = inputRefs.current;
@@ -47,7 +53,7 @@ const OTPSection = () => {
           <p className="text-body-secondary m-0">{t('otpDesc')}</p>
         </div>
 
-        <form id="otp-form">
+        <form id="otp-form" onSubmit={handleSubmit}>
           <div className="d-flex justify-content-center mb-3">
             {[0, 1, 2, 3, 4].map((index) => (
               <input

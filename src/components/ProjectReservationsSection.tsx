@@ -1,9 +1,16 @@
 
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAppState } from '../contexts/AppStateContext';
 
 const ProjectReservationsSection = () => {
   const { t } = useLanguage();
+  const { setCurrentSection } = useAppState();
+
+  const handleCarWashClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setCurrentSection('login');
+  };
 
   return (
     <section id="project-reservations-section" className="m-0">
@@ -20,7 +27,7 @@ const ProjectReservationsSection = () => {
         </div>
 
         <div className="text-start mb-3">
-          <a href="#" className="btn border rounded-5 w-100 p-3 mb-3">
+          <a href="#" onClick={handleCarWashClick} className="btn border rounded-5 w-100 p-3 mb-3">
             <div className="d-grid d-md-flex align-items-center">
               <img 
                 src="https://mohamedalzaki.com/rewash/image/services_icon.webp" 

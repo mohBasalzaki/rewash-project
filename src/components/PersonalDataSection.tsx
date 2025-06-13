@@ -1,9 +1,15 @@
-
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAppState } from '../contexts/AppStateContext';
 
 const PersonalDataSection = () => {
   const { t } = useLanguage();
+  const { nextSection } = useAppState();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    nextSection();
+  };
 
   return (
     <section id="personal-data-section" className="m-0">
@@ -23,7 +29,7 @@ const PersonalDataSection = () => {
           <div className="progress-bar rounded" style={{ width: '25%' }}></div>
         </div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="text-start mb-3">
             <label className="form-label">
               {t('name')} <span className="text-danger">{t('required')}</span>

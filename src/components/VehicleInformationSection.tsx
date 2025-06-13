@@ -1,9 +1,15 @@
-
 import React from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAppState } from '../contexts/AppStateContext';
 
 const VehicleInformationSection = () => {
   const { t } = useLanguage();
+  const { nextSection } = useAppState();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    nextSection();
+  };
 
   return (
     <section id="vehicle-information-section" className="m-0">
@@ -23,7 +29,7 @@ const VehicleInformationSection = () => {
           <div className="progress-bar rounded" style={{ width: '50%' }}></div>
         </div>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="text-start mb-3">
             <label className="form-label">{t('brand')}</label>
             <select className="form-select" aria-label="Default select example">
