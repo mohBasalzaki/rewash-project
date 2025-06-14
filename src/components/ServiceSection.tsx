@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAppState } from '../contexts/AppStateContext';
@@ -36,12 +35,23 @@ const ServiceSection = () => {
 
   const calculateTotal = () => {
     let total = 0;
+    
+    // إضافة سعر الخدمة الأساسية
+    if (selectedServiceType) {
+      const selectedService = serviceTypes.find(service => service.id.toString() === selectedServiceType);
+      if (selectedService && selectedService.price) {
+        total += selectedService.promotional_price || selectedService.price;
+      }
+    }
+    
+    // إضافة أسعار الخدمات الإضافية
     selectedAdditionalServices.forEach(serviceId => {
       const service = additionalServices.find(s => s.id === serviceId);
       if (service) {
         total += service.promotional_price || service.price;
       }
     });
+    
     return total;
   };
 
@@ -86,10 +96,36 @@ const ServiceSection = () => {
               {serviceTypes.map((type) => (
                 <option key={type.id} value={type.id}>
                   {type.name}
+                  {type.price && ` - ${type.promotional_price || type.price} ${t('riyal')}`}
                 </option>
               ))}
             </select>
           </div>
+
+          {/* عرض سعر الخدمة المحددة */}
+          {selectedServiceType && (
+            <div className="alert alert-info mb-3">
+              {(() => {
+                const selectedService = serviceTypes.find(service => service.id.toString() === selectedServiceType);
+                if (selectedService && selectedService.price) {
+                  return (
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span>{selectedService.name}</span>
+                      <div>
+                        <span className="fw-bold">{selectedService.promotional_price || selectedService.price} {t('riyal')}</span>
+                        {selectedService.promotional_price && selectedService.promotional_price < selectedService.price && (
+                          <span className="text-body-tertiary text-decoration-line-through ms-2">
+                            {selectedService.price} {t('riyal')}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
+            </div>
+          )}
 
           <div className="row g-3">
             <div className="col">

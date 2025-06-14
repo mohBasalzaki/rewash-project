@@ -68,6 +68,8 @@ export interface VehicleType {
 export interface ServiceType {
   id: number;
   name: string;
+  price?: number;
+  promotional_price?: number;
 }
 
 export interface AdditionalService {
