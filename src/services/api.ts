@@ -1,3 +1,4 @@
+
 import { API_BASE_URL, API_ENDPOINTS } from '../config/api';
 import { 
   ApiResponse, 
@@ -73,7 +74,7 @@ class ApiService {
           code: 422,
           message: 'Invalid OTP (Mock)',
           data: null,
-          errors: { otp: ['OTP does not match'] }
+          errors: []
         };
       }
     }
@@ -127,9 +128,42 @@ class ApiService {
     });
   }
 
-  // Projects
+  // Projects - Updated to return mock data that matches the provided structure
   async getProjectCarServices(): Promise<ApiResponse<ProjectData>> {
-    return this.request(API_ENDPOINTS.PROJECTS_CAR_SERVICES);
+    // Return the mock data you provided since the API endpoint returns 404
+    const mockProjectData: ProjectData = {
+      id: 1,
+      project_name: "rewash",
+      slug: "car-services",
+      attributes: [
+        {
+          id: 1,
+          name: "المنطقة",
+          values: [
+            { id: 1, value: "أ" },
+            { id: 2, value: "ب" },
+            { id: 3, value: "ج" }
+          ]
+        },
+        {
+          id: 2,
+          name: "موقع السيارة", 
+          values: [
+            { id: 4, value: "خارج المواقف" },
+            { id: 5, value: "داخل المواقف" },
+            { id: 6, value: "الشارع" }
+          ]
+        }
+      ]
+    };
+
+    return {
+      status: true,
+      code: 200,
+      message: "Project attributes for form",
+      data: mockProjectData,
+      errors: []
+    };
   }
 
   // Meta data
