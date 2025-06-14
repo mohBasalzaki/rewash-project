@@ -1,49 +1,124 @@
-import React, { useEffect, useRef } from 'react';
+
+import React, { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAppState } from '../contexts/AppStateContext';
+import { apiService } from '../services/api';
+import { useToast } from '../hooks/use-toast';
 
 const OTPSection = () => {
   const { t } = useLanguage();
   const { nextSection } = useAppState();
+  const { toast } = useToast();
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [otp, setOtp] = useState(['', '', '', '', '']);
+  const [countdown, setCountdown] = useState(52);
+  const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    nextSection();
+    setLoading(true);
+    
+    const otpCode = otp.join('');
+    
+    try {
+      const response = await apiService.validateOtp(otpCode, '05xxxxxxxx'); // Replace with actual phone number
+      
+      if (response.status) {
+        toast({
+          title: "تم التحقق بنجاح",
+          description: "تم التحقق من رمز OTP بنجاح",
+        });
+        nextSection();
+      } else {
+        toast({
+          title: "خطأ",
+          description: response.message || "رمز التحقق غير صحيح",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error validating OTP:', error);
+      toast({
+        title: "خطأ",
+        description: "حدث خطأ في التحقق من الرمز",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleResendOtp = async () => {
+    setResendLoading(true);
+    
+    try {
+      const response = await apiService.resendOtp('05xxxxxxxx'); // Replace with actual phone number
+      
+      if (response.status) {
+        toast({
+          title: "تم إعادة الإرسال",
+          description: "تم إرسال رمز جديد إلى رقم هاتفك",
+        });
+        setCountdown(52);
+      } else {
+        toast({
+          title: "خطأ",
+          description: response.message || "فشل في إعادة إرسال الرمز",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error resending OTP:', error);
+      toast({
+        title: "خطأ",
+        description: "حدث خطأ في إعادة إرسال الرمز",
+        variant: "destructive",
+      });
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
+  const handleOtpChange = (index: number, value: string) => {
+    if (value.length > 1) return;
+    
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+    
+    if (value && index < 4) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  useEffect(() => {
+    const timer = countdown > 0 && setInterval(() => setCountdown(countdown - 1), 1000);
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [countdown]);
 
   useEffect(() => {
     const inputs = inputRefs.current;
     
-    const handleInput = (index: number) => (e: Event) => {
-      const input = e.target as HTMLInputElement;
-      if (input.value.length === 1 && index < inputs.length - 1) {
-        inputs[index + 1]?.focus();
-      }
-    };
-
     const handleKeyDown = (index: number) => (e: KeyboardEvent) => {
-      const input = e.target as HTMLInputElement;
-      if (e.key === "Backspace" && input.value === '' && index > 0) {
-        inputs[index - 1]?.focus();
+      if (e.key === "Backspace" && !otp[index] && index > 0) {
+        inputRefs.current[index - 1]?.focus();
       }
     };
 
     inputs.forEach((input, index) => {
       if (input) {
-        const inputHandler = handleInput(index);
         const keydownHandler = handleKeyDown(index);
-        
-        input.addEventListener('input', inputHandler);
         input.addEventListener('keydown', keydownHandler);
         
         return () => {
-          input.removeEventListener('input', inputHandler);
           input.removeEventListener('keydown', keydownHandler);
         };
       }
     });
-  }, []);
+  }, [otp]);
 
   return (
     <section id="otp-section" className="m-0">
@@ -64,20 +139,36 @@ const OTPSection = () => {
                 className="form-control otp-input"
                 inputMode="numeric"
                 pattern="[0-9]*"
+                value={otp[index]}
+                onChange={(e) => handleOtpChange(index, e.target.value)}
               />
             ))}
           </div>
 
           <div className="d-grid text-center mb-3">
             <label htmlFor="code" className="form-label">
-              {t('resendCodeIn')} <span className="text-primary fs-5 fw-bold">52</span> {t('seconds')}
+              {t('resendCodeIn')} <span className="text-primary fs-5 fw-bold">{countdown}</span> {t('seconds')}
             </label>
-            <a href="#" className="text-body-tertiary text-decoration-none">
-              {t('resendNewCode')}
-            </a>
+            {countdown === 0 ? (
+              <button 
+                type="button"
+                className="btn btn-link text-decoration-none"
+                onClick={handleResendOtp}
+                disabled={resendLoading}
+              >
+                {resendLoading ? 'جاري الإرسال...' : t('resendNewCode')}
+              </button>
+            ) : (
+              <span className="text-body-tertiary">
+                {t('resendNewCode')}
+              </span>
+            )}
           </div>
 
-          <button type="submit" className="btn btn-primary w-100">
+          <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+            {loading ? (
+              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            ) : null}
             {t('next')}
           </button>
         </form>

@@ -1,16 +1,53 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAppState } from '../contexts/AppStateContext';
+import { useData } from '../contexts/DataContext';
 import ProgressBar from './ProgressBar';
 
 const PersonalDataSection = () => {
   const { t } = useLanguage();
   const { nextSection } = useAppState();
+  const { projectData, loading } = useData();
+  
+  const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState('');
+  const [carLocation, setCarLocation] = useState('');
+  const [zone, setZone] = useState('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log('Personal Data:', {
+      name,
+      phoneNumber,
+      address,
+      carLocation,
+      zone
+    });
     nextSection();
   };
+
+  // Helper functions to get attributes
+  const getCarLocationOptions = () => {
+    return projectData?.attributes.find(attr => attr.name === 'موقع السيارة')?.values || [];
+  };
+
+  const getZoneOptions = () => {
+    return projectData?.attributes.find(attr => attr.name === 'المنطقة')?.values || [];
+  };
+
+  if (loading) {
+    return (
+      <section id="personal-data-section" className="m-0">
+        <div className="card-body text-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="personal-data-section" className="m-0">
@@ -38,6 +75,8 @@ const PersonalDataSection = () => {
               className="form-control"
               placeholder={t('namePlaceholder')}
               name="full-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
             />
           </div>
@@ -54,6 +93,8 @@ const PersonalDataSection = () => {
               maxLength={10}
               title="يجب كتابة 10 أرقام وتبدأ بـ 05"
               name="phone-number"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
               required
             />
           </div>
@@ -67,6 +108,8 @@ const PersonalDataSection = () => {
               className="form-control"
               placeholder={t('addressPlaceholder')}
               name="address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
               required
             />
           </div>
@@ -75,11 +118,18 @@ const PersonalDataSection = () => {
             <div className="col">
               <div className="text-start mb-3">
                 <label className="form-label">{t('carLocation')}</label>
-                <select className="form-select" aria-label="Default select example">
-                  <option selected>{t('outsideParking')}</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                <select 
+                  className="form-select"
+                  value={carLocation}
+                  onChange={(e) => setCarLocation(e.target.value)}
+                  required
+                >
+                  <option value="">{t('selectCarLocation') || 'اختر موقع السيارة'}</option>
+                  {getCarLocationOptions().map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.value}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -87,11 +137,18 @@ const PersonalDataSection = () => {
             <div className="col">
               <div className="text-start mb-3">
                 <label className="form-label">{t('zone')}</label>
-                <select className="form-select" aria-label="Default select example">
-                  <option selected>T3</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                <select 
+                  className="form-select"
+                  value={zone}
+                  onChange={(e) => setZone(e.target.value)}
+                  required
+                >
+                  <option value="">{t('selectZone') || 'اختر المنطقة'}</option>
+                  {getZoneOptions().map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.value}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>

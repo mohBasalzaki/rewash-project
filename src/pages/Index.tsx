@@ -2,6 +2,7 @@
 import React from 'react';
 import { LanguageProvider, useLanguage } from '../contexts/LanguageContext';
 import { AppStateProvider, useAppState } from '../contexts/AppStateContext';
+import { DataProvider } from '../contexts/DataContext';
 import Header from '../components/Header';
 import ProjectReservationsSection from '../components/ProjectReservationsSection';
 import LoginSection from '../components/LoginSection';
@@ -58,7 +59,8 @@ const AppContent = () => {
       
       <Footer />
 
-      <style>{`
+      <style>
+        {`
         .otp-input {
           width: 100px;
           height: 100px;
@@ -83,7 +85,8 @@ const AppContent = () => {
           padding: 0;
           box-sizing: border-box;
         }
-      `}</style>
+      `}
+      </style>
     </div>
   );
 };
@@ -91,9 +94,11 @@ const AppContent = () => {
 const Index = () => {
   return (
     <LanguageProvider>
-      <AppStateProvider>
-        <AppContent />
-      </AppStateProvider>
+      <DataProvider>
+        <AppStateProvider>
+          <AppContent />
+        </AppStateProvider>
+      </DataProvider>
     </LanguageProvider>
   );
 };

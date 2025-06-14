@@ -1,15 +1,47 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAppState } from '../contexts/AppStateContext';
+import { apiService } from '../services/api';
+import { useToast } from '../hooks/use-toast';
 
 const LoginSection = () => {
   const { t } = useLanguage();
   const { nextSection } = useAppState();
+  const { toast } = useToast();
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    nextSection();
+    setLoading(true);
+
+    try {
+      const response = await apiService.sendOtp(phoneNumber);
+      
+      if (response.status) {
+        toast({
+          title: "تم إرسال الرمز",
+          description: "تم إرسال رمز التحقق إلى رقم هاتفك",
+        });
+        nextSection();
+      } else {
+        toast({
+          title: "خطأ",
+          description: response.message || "فشل في إرسال رمز التحقق",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+      toast({
+        title: "خطأ",
+        description: "حدث خطأ في إرسال رمز التحقق",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -33,11 +65,16 @@ const LoginSection = () => {
               maxLength={10}
               title="يجب كتابة 10 أرقام وتبدأ بـ 05"
               name="phone-number"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
               required
             />
           </div>
           
-          <button type="submit" className="btn btn-primary w-100">
+          <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+            {loading ? (
+              <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            ) : null}
             {t('next')}
           </button>
         </form>
