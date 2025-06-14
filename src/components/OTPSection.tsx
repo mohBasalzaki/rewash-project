@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAppState } from '../contexts/AppStateContext';
@@ -14,6 +13,7 @@ const OTPSection = () => {
   const [countdown, setCountdown] = useState(52);
   const [loading, setLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
+  const [showMockOtp, setShowMockOtp] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,7 +22,7 @@ const OTPSection = () => {
     const otpCode = otp.join('');
     
     try {
-      const response = await apiService.validateOtp(otpCode, '05xxxxxxxx'); // Replace with actual phone number
+      const response = await apiService.validateOtp(otpCode, '05xxxxxxxx');
       
       if (response.status) {
         toast({
@@ -53,7 +53,7 @@ const OTPSection = () => {
     setResendLoading(true);
     
     try {
-      const response = await apiService.resendOtp('05xxxxxxxx'); // Replace with actual phone number
+      const response = await apiService.resendOtp('05xxxxxxxx');
       
       if (response.status) {
         toast({
@@ -92,6 +92,15 @@ const OTPSection = () => {
     }
   };
 
+  const fillMockOtp = () => {
+    const mockOtp = apiService.getCurrentMockOtp().split('');
+    setOtp(mockOtp);
+    toast({
+      title: "تم ملء الرمز",
+      description: `تم ملء رمز OTP التجريبي: ${mockOtp.join('')}`,
+    });
+  };
+
   useEffect(() => {
     const timer = countdown > 0 && setInterval(() => setCountdown(countdown - 1), 1000);
     return () => {
@@ -126,6 +135,34 @@ const OTPSection = () => {
         <div className="text-start mb-3">
           <h1 className="fs-4 fw-bold m-0">{t('accessCode')}</h1>
           <p className="text-body-secondary m-0">{t('otpDesc')}</p>
+        </div>
+
+        {/* Test OTP Helper */}
+        <div className="alert alert-info mb-3">
+          <small>
+            وضع الاختبار مفعل - 
+            <button 
+              type="button" 
+              className="btn btn-link btn-sm p-0 ms-1"
+              onClick={() => setShowMockOtp(!showMockOtp)}
+            >
+              {showMockOtp ? 'إخفاء' : 'عرض'} رمز OTP التجريبي
+            </button>
+          </small>
+          {showMockOtp && (
+            <div className="mt-2">
+              <small className="d-block mb-2">
+                الرمز التجريبي: <strong>{apiService.getCurrentMockOtp()}</strong>
+              </small>
+              <button 
+                type="button" 
+                className="btn btn-outline-primary btn-sm"
+                onClick={fillMockOtp}
+              >
+                ملء الرمز تلقائياً
+              </button>
+            </div>
+          )}
         </div>
 
         <form id="otp-form" onSubmit={handleSubmit}>
