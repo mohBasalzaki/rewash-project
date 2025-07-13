@@ -26,18 +26,24 @@ const AppContent = () => {
     script.async = true;
     document.body.appendChild(script);
   
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = isRTL ? '/css/main.rtl.css' : '/css/main.css';
-    document.head.appendChild(link);
+    const mainStyle = document.createElement('link');
+    mainStyle.rel = 'stylesheet';
+    mainStyle.type = 'text/css';
+    mainStyle.href = isRTL ? '/css/main.rtl.css' : '/css/main.css';
+    document.head.appendChild(mainStyle);
+  
+    const bundleStyle = document.createElement('link');
+    bundleStyle.rel = 'stylesheet';
+    bundleStyle.type = 'text/css';
+    bundleStyle.href = '/css/bundle.css';
+    document.head.appendChild(bundleStyle);
   
     return () => {
       document.body.removeChild(script);
-      document.head.removeChild(link);
+      document.head.removeChild(mainStyle);
+      document.head.removeChild(bundleStyle);
     };
   }, [isRTL]);
-  
 
   const renderCurrentSection = () => {
     switch (currentSection) {
