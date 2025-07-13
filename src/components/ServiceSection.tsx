@@ -103,7 +103,7 @@ const ServiceSection = () => {
           </div>
 
           {/* عرض سعر الخدمة المحددة */}
-          {selectedServiceType && (
+          {/* {selectedServiceType && (
             <div className="alert alert-info mb-3">
               {(() => {
                 const selectedService = serviceTypes.find(service => service.id.toString() === selectedServiceType);
@@ -125,7 +125,7 @@ const ServiceSection = () => {
                 return null;
               })()}
             </div>
-          )}
+          )} */}
 
           <div className="row g-3">
             <div className="col">

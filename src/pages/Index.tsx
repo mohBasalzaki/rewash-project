@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import { LanguageProvider, useLanguage } from '../contexts/LanguageContext';
 import { AppStateProvider, useAppState } from '../contexts/AppStateContext';
 import { DataProvider } from '../contexts/DataContext';
@@ -17,6 +16,28 @@ import Footer from '../components/Footer';
 const AppContent = () => {
   const { isRTL } = useLanguage();
   const { currentSection } = useAppState();
+
+  useEffect(() => {
+    document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+    document.documentElement.setAttribute('lang', isRTL ? 'ar' : 'en');
+  
+    const script = document.createElement("script");
+    script.src = "/js/main.js";
+    script.async = true;
+    document.body.appendChild(script);
+  
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = isRTL ? '/css/main.rtl.css' : '/css/main.css';
+    document.head.appendChild(link);
+  
+    return () => {
+      document.body.removeChild(script);
+      document.head.removeChild(link);
+    };
+  }, [isRTL]);
+  
 
   const renderCurrentSection = () => {
     switch (currentSection) {
@@ -45,8 +66,9 @@ const AppContent = () => {
     <div 
       className="d-flex flex-column bg-body-tertiary justify-content-between min-vh-100"
       dir={isRTL ? 'rtl' : 'ltr'}
-      style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
     >
+      <link rel="stylesheet" href="../public/css/bundle.css" />
+      
       <Header />
 
       <main className="my-3">
@@ -58,35 +80,6 @@ const AppContent = () => {
       </main>
       
       <Footer />
-
-      <style>
-        {`
-        .otp-input {
-          width: 100px;
-          height: 100px;
-          margin: 5px;
-          text-align: center;
-        }
-
-        .form-check-input {
-          right: auto;
-          left: 0;
-        }
-
-        @media (max-width: 576px) {
-          .otp-input {
-            width: 50px;
-            height: 50px;
-          }
-        }
-
-        * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-        }
-      `}
-      </style>
     </div>
   );
 };

@@ -68,7 +68,8 @@ const VehicleInformationSection = () => {
               <option value="">{t('selectBrand') || 'اختر الماركة'}</option>
               {vehicleTypes.map((type) => (
                 <option key={type.id} value={type.id}>
-                  {type.type}
+                  <img src={type.icon} alt={type.type} />
+                  <span>{type.type}</span>
                 </option>
               ))}
             </select>
@@ -85,7 +86,8 @@ const VehicleInformationSection = () => {
               <option value="">{t('selectColor') || 'اختر اللون'}</option>
               {vehicleColors.map((color) => (
                 <option key={color.id} value={color.id}>
-                  {color.vehicle_color}
+                  {/* <span className="p-3" style={`background-color: ${color.vehicle_color_code}`}></span> */}
+                  <span>{color.vehicle_color}</span>
                 </option>
               ))}
             </select>
