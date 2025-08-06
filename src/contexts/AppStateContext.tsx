@@ -1,5 +1,6 @@
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { AppointmentData } from '../types/api';
 
 type Section = 
   | 'project-reservations'
@@ -9,13 +10,19 @@ type Section =
   | 'vehicle-information'
   | 'service'
   | 'payment'
-  | 'payment-success';
+  | 'payment-success'
+  | 'my-reservations';
 
 interface AppStateContextType {
   currentSection: Section;
   setCurrentSection: (section: Section) => void;
   nextSection: () => void;
   getProgressPercentage: () => number;
+  phoneNumber: string;
+  setPhoneNumber: (phone: string) => void;
+  appointmentData: AppointmentData;
+  updateAppointmentData: (data: Partial<AppointmentData>) => void;
+  clearAppointmentData: () => void;
 }
 
 const AppStateContext = createContext<AppStateContextType | undefined>(undefined);
@@ -34,6 +41,36 @@ interface AppStateProviderProps {
 
 export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) => {
   const [currentSection, setCurrentSection] = useState<Section>('project-reservations');
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  
+  // إدارة بيانات النموذج
+  const [appointmentData, setAppointmentData] = useState<AppointmentData>({
+    // Personal Data
+    name: '',
+    phoneNumber: '',
+    address: '',
+    carLocation: '',
+    zone: '',
+    
+    // Vehicle Information
+    vehicleBrand: '',
+    vehicleColor: '',
+    plateNumber: '',
+    notes: '',
+    
+    // Service Information
+    serviceType: '',
+    appointmentDate: '',
+    appointmentTime: '',
+    additionalServices: [],
+    
+    // Payment Information
+    paymentMethod: 'creditcard',
+    cardNumber: '',
+    expiryDate: '',
+    cvv: '',
+    cardholderName: ''
+  });
 
   const sectionOrder: Section[] = [
     'project-reservations',
@@ -65,12 +102,44 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
     return ((progressIndex + 1) / progressSections.length) * 100;
   };
 
+  const updateAppointmentData = (data: Partial<AppointmentData>) => {
+    setAppointmentData(prev => ({ ...prev, ...data }));
+  };
+
+  const clearAppointmentData = () => {
+    setAppointmentData({
+      name: '',
+      phoneNumber: '',
+      address: '',
+      carLocation: '',
+      zone: '',
+      vehicleBrand: '',
+      vehicleColor: '',
+      plateNumber: '',
+      notes: '',
+      serviceType: '',
+      appointmentDate: '',
+      appointmentTime: '',
+      additionalServices: [],
+      paymentMethod: 'creditcard',
+      cardNumber: '',
+      expiryDate: '',
+      cvv: '',
+      cardholderName: ''
+    });
+  };
+
   return (
     <AppStateContext.Provider value={{ 
       currentSection, 
       setCurrentSection, 
       nextSection, 
-      getProgressPercentage 
+      getProgressPercentage,
+      phoneNumber,
+      setPhoneNumber,
+      appointmentData,
+      updateAppointmentData,
+      clearAppointmentData
     }}>
       {children}
     </AppStateContext.Provider>

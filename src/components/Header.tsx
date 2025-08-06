@@ -11,7 +11,7 @@ const Header = () => {
       <LanguageSelector />
       <a href="#">
         <img 
-          src="https://mohamedalzaki.com/rewash/image/logo.svg" 
+          src="../image/logo.svg" 
           width="120" 
           alt={t('logo')}
         />

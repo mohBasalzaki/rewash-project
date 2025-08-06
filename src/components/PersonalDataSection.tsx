@@ -7,23 +7,17 @@ import ProgressBar from './ProgressBar';
 
 const PersonalDataSection = () => {
   const { t } = useLanguage();
-  const { nextSection } = useAppState();
+  const { nextSection, setCurrentSection, appointmentData, updateAppointmentData } = useAppState();
   const { projectData, loading } = useData();
-  
-  const [name, setName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [address, setAddress] = useState('');
-  const [carLocation, setCarLocation] = useState('');
-  const [zone, setZone] = useState('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Personal Data:', {
-      name,
-      phoneNumber,
-      address,
-      carLocation,
-      zone
+      name: appointmentData.name,
+      phoneNumber: appointmentData.phoneNumber,
+      address: appointmentData.address,
+      carLocation: appointmentData.carLocation,
+      zone: appointmentData.zone
     });
     nextSection();
   };
@@ -58,7 +52,10 @@ const PersonalDataSection = () => {
             <p className="text-body-secondary m-0">{t('personalDataDesc')}</p>
           </div>
 
-          <a href="#" className="btn btn-outline-primary">
+          <a href="#" className="btn btn-outline-primary" onClick={(e) => {
+            e.preventDefault();
+            setCurrentSection('my-reservations');
+          }}>
             {t('myReservations')}
           </a>
         </div>
@@ -75,8 +72,8 @@ const PersonalDataSection = () => {
               className="form-control"
               placeholder={t('namePlaceholder')}
               name="full-name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={appointmentData.name}
+              onChange={(e) => updateAppointmentData({ name: e.target.value })}
               required
             />
           </div>
@@ -93,8 +90,8 @@ const PersonalDataSection = () => {
               maxLength={10}
               title="يجب كتابة 10 أرقام وتبدأ بـ 05"
               name="phone-number"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              value={appointmentData.phoneNumber}
+              onChange={(e) => updateAppointmentData({ phoneNumber: e.target.value })}
               required
             />
           </div>
@@ -108,8 +105,8 @@ const PersonalDataSection = () => {
               className="form-control"
               placeholder={t('addressPlaceholder')}
               name="address"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
+              value={appointmentData.address}
+              onChange={(e) => updateAppointmentData({ address: e.target.value })}
               required
             />
           </div>
@@ -120,8 +117,8 @@ const PersonalDataSection = () => {
                 <label className="form-label">{t('carLocation')}</label>
                 <select 
                   className="form-select"
-                  value={carLocation}
-                  onChange={(e) => setCarLocation(e.target.value)}
+                  value={appointmentData.carLocation}
+                  onChange={(e) => updateAppointmentData({ carLocation: e.target.value })}
                   required
                 >
                   <option value="">{t('selectCarLocation') || 'اختر موقع السيارة'}</option>
@@ -139,8 +136,8 @@ const PersonalDataSection = () => {
                 <label className="form-label">{t('zone')}</label>
                 <select 
                   className="form-select"
-                  value={zone}
-                  onChange={(e) => setZone(e.target.value)}
+                  value={appointmentData.zone}
+                  onChange={(e) => updateAppointmentData({ zone: e.target.value })}
                   required
                 >
                   <option value="">{t('selectZone') || 'اختر المنطقة'}</option>

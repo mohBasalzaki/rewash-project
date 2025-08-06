@@ -7,19 +7,20 @@ import { useToast } from '../hooks/use-toast';
 
 const LoginSection = () => {
   const { t } = useLanguage();
-  const { nextSection } = useAppState();
+  const { nextSection, setPhoneNumber } = useAppState();
   const { toast } = useToast();
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-
+    
     try {
-      const response = await apiService.sendOtp(phoneNumber);
+      const response = await apiService.sendOtp(phone);
       
       if (response.status) {
+        setPhoneNumber(phone);
         toast({
           title: "تم إرسال الرمز",
           description: "تم إرسال رمز التحقق إلى رقم هاتفك",
@@ -65,8 +66,8 @@ const LoginSection = () => {
               maxLength={10}
               title="يجب كتابة 10 أرقام وتبدأ بـ 05"
               name="phone-number"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               required
             />
           </div>

@@ -40,3 +40,153 @@
 .read-the-docs {
   color: #888;
 }
+
+/* My Reservations Section Styles */
+.text-dark-purple {
+  color: #6f42c1 !important;
+}
+
+.bg-success {
+  background-color: #198754 !important;
+}
+
+.bg-warning {
+  background-color: #ffc107 !important;
+}
+
+.bg-info {
+  background-color: #0dcaf0 !important;
+}
+
+.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.badge {
+  font-size: 0.75rem;
+}
+
+.btn-outline-primary:hover {
+  background-color: #6f42c1;
+  border-color: #6f42c1;
+}
+
+/* Card hover effects */
+.card:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .col-md-6 {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Payment Success Section Styles */
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #28a745, #20c997);
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  }
+}
+
+.transaction-card {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border: 1px solid #dee2e6;
+  transition: all 0.3s ease;
+}
+
+.transaction-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-card {
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  border-color: #6f42c1;
+}
+
+.price-discount {
+  position: relative;
+}
+
+.price-discount::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -5px;
+  right: -5px;
+  height: 1px;
+  background-color: #dc3545;
+  transform: rotate(-5deg);
+}
+
+/* Button animations */
+.btn-primary {
+  background: linear-gradient(135deg, #6f42c1, #8e44ad);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #5a32a3, #7d3c98);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(111, 66, 193, 0.3);
+}
+
+.btn-outline-primary {
+  border-color: #6f42c1;
+  color: #6f42c1;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+  background-color: #6f42c1;
+  border-color: #6f42c1;
+  transform: translateY(-1px);
+}
+
+/* Loading animation */
+.spinner-border {
+  color: #6f42c1;
+}
+
+/* Responsive design for payment success */
+@media (max-width: 576px) {
+  .success-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .transaction-card {
+    padding: 0.75rem !important;
+  }
+  
+  .product-card .card-body {
+    padding: 0.75rem !important;
+  }
+}

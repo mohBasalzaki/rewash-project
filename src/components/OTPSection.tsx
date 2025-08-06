@@ -6,7 +6,7 @@ import { useToast } from '../hooks/use-toast';
 
 const OTPSection = () => {
   const { t } = useLanguage();
-  const { nextSection } = useAppState();
+  const { nextSection, phoneNumber } = useAppState();
   const { toast } = useToast();
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [otp, setOtp] = useState(['', '', '', '', '']);
@@ -22,7 +22,7 @@ const OTPSection = () => {
     const otpCode = otp.join('');
     
     try {
-      const response = await apiService.validateOtp(otpCode, '05xxxxxxxx');
+      const response = await apiService.validateOtp(otpCode, phoneNumber);
       
       if (response.status) {
         toast({
@@ -53,7 +53,7 @@ const OTPSection = () => {
     setResendLoading(true);
     
     try {
-      const response = await apiService.resendOtp('05xxxxxxxx');
+      const response = await apiService.resendOtp(phoneNumber);
       
       if (response.status) {
         toast({

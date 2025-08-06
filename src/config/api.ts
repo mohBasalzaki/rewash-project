@@ -21,5 +21,17 @@ export const API_ENDPOINTS = {
   ADDITIONAL_SERVICES: '/api/meta/additional-services',
   
   // Appointments
-  APPOINTMENTS: '/api/appointments'
+  APPOINTMENTS: '/api/appointments',
+  
+  // User Reservations
+  USER_RESERVATIONS: '/api/user/reservations',
+  CANCEL_RESERVATION: '/api/user/reservations/{id}/cancel',
+  UPDATE_RESERVATION_STATUS: '/api/user/reservations/{id}/status',
+  
+  // Products
+  POPULAR_PRODUCTS: '/api/products/popular',
+  PRODUCTS: '/api/products',
+  
+  // Transaction Details
+  TRANSACTION_DETAILS: '/api/transactions/{id}/details'
 };

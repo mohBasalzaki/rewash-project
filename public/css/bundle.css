@@ -40,6 +40,11 @@ button,hr,input{overflow:visible}progress,sub,sup{vertical-align:baseline}[type=
     border-color: transparent;
 }
 
+.btn-outline-danger {
+    background: #dc35451A;
+    border-color: transparent;
+}
+
 .breadcrumb-item {
     font-size: 14px;
 }
@@ -196,6 +201,27 @@ button,hr,input{overflow:visible}progress,sub,sup{vertical-align:baseline}[type=
 .form-check-input {
     right: auto;
     left: 0;
+}
+
+.badge-item {
+    top: 1rem;
+}
+
+[dir="rtl"] .badge-item {
+    right: auto;
+    left: 1rem;
+}
+
+[dir="ltr"] .badge-item {
+    right: 1rem;
+    left: auto;
+}
+
+.calendar-icon {
+    height: 70px;
+    width: 70px;
+    color: #6539C3;
+    background: #6539C31A;
 }
 
 @media (max-width: 576px) {

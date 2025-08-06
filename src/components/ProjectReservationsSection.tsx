@@ -16,7 +16,7 @@ const ProjectReservationsSection = () => {
     <section id="project-reservations-section" className="m-0">
       <div className="card-body text-center">
         <img 
-          src="https://mohamedalzaki.com/rewash/image/modal_img.webp" 
+          src="/image/modal_img.webp" 
           className="d-md-none w-100 mb-3" 
           alt=""
         />
@@ -30,7 +30,7 @@ const ProjectReservationsSection = () => {
           <a href="#" onClick={handleCarWashClick} className="btn border rounded-5 w-100 p-3 mb-3">
             <div className="d-grid d-md-flex align-items-center">
               <img 
-                src="https://mohamedalzaki.com/rewash/image/services_icon.webp" 
+                src="/image/services_icon.webp" 
                 width="70"
                 alt=""
               />
@@ -42,10 +42,10 @@ const ProjectReservationsSection = () => {
             </div>
           </a>
 
-          <a href="#" className="btn border rounded-5 w-100 p-3">
+          <a href="https://online.rewash.store/" className="btn border rounded-5 w-100 p-3">
             <div className="d-grid d-md-flex align-items-center">
               <img 
-                src="https://mohamedalzaki.com/rewash/image/store_icon.webp" 
+                src="/image/store_icon.webp" 
                 width="70"
                 alt=""
               />
@@ -60,7 +60,7 @@ const ProjectReservationsSection = () => {
 
         <a href="#" className="btn btn-outline-success w-100">
           <img 
-            src="https://mohamedalzaki.com/rewash/image/whatsapp.gif" 
+            src="/image/whatsapp.gif" 
             width="30"
             alt=""
           />

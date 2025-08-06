@@ -3,39 +3,66 @@ import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useAppState } from '../contexts/AppStateContext';
 import { useData } from '../contexts/DataContext';
+import { apiService } from '../services/api';
 import ProgressBar from './ProgressBar';
 
 const PaymentSection = () => {
   const { t } = useLanguage();
-  const { nextSection } = useAppState();
+  const { nextSection, setCurrentSection, appointmentData, updateAppointmentData } = useAppState();
   const { paymentMethods, loading } = useData();
-  
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('creditcard');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [cvv, setCvv] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [mobile, setMobile] = useState('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Payment Data:', {
-      selectedPaymentMethod,
-      cardNumber,
-      expiryDate,
-      cvv,
-      fullName,
-      mobile
-    });
-    nextSection();
+    setSubmitting(true);
+    
+    // التحقق من البيانات المطلوبة
+    const requiredFields = [
+      'name', 'phoneNumber', 'address', 'carLocation', 'zone',
+      'vehicleBrand', 'vehicleColor', 'plateNumber',
+      'serviceType', 'appointmentDate', 'appointmentTime'
+    ];
+    
+    const missingFields = requiredFields.filter(field => !appointmentData[field as keyof typeof appointmentData]);
+    
+    if (missingFields.length > 0) {
+      alert(`البيانات التالية مطلوبة: ${missingFields.join(', ')}`);
+      setSubmitting(false);
+      return;
+    }
+    
+    console.log('Submitting appointment data:', appointmentData);
+    
+    try {
+      // إنشاء الحجز في السيرفر
+      const response = await apiService.createAppointment(appointmentData);
+      
+      console.log('API Response:', response);
+      
+      if (response.status) {
+        console.log('Appointment created successfully:', response.data);
+        alert('تم إنشاء الحجز بنجاح!');
+        // الانتقال إلى صفحة نجاح الدفع
+        nextSection();
+      } else {
+        console.error('Failed to create appointment:', response.message);
+        alert(`فشل في إنشاء الحجز: ${response.message}`);
+      }
+    } catch (error) {
+      console.error('Error creating appointment:', error);
+      alert('حدث خطأ أثناء إنشاء الحجز. يرجى المحاولة مرة أخرى.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const renderPaymentFields = () => {
     if (!paymentMethods) return null;
 
-    const method = paymentMethods.methods[selectedPaymentMethod as keyof typeof paymentMethods.methods];
+          const method = paymentMethods.methods[appointmentData.paymentMethod as keyof typeof paymentMethods.methods];
     
-    if (selectedPaymentMethod === 'creditcard') {
+    if (appointmentData.paymentMethod === 'creditcard') {
       return (
         <>
           <div className="text-start mb-3">
@@ -45,8 +72,8 @@ const PaymentSection = () => {
               className="form-control text-start" 
               id="cardNumber" 
               placeholder={t('cardNumberPlaceholder')}
-              value={cardNumber}
-              onChange={(e) => setCardNumber(e.target.value)}
+              value={appointmentData.cardNumber || ''}
+              onChange={(e) => updateAppointmentData({ cardNumber: e.target.value })}
               required
             />
           </div>
@@ -58,8 +85,8 @@ const PaymentSection = () => {
                 type="month" 
                 className="form-control text-start" 
                 id="expiryDate"
-                value={expiryDate}
-                onChange={(e) => setExpiryDate(e.target.value)}
+                value={appointmentData.expiryDate || ''}
+                onChange={(e) => updateAppointmentData({ expiryDate: e.target.value })}
                 required
               />
             </div>
@@ -71,8 +98,8 @@ const PaymentSection = () => {
                 className="form-control text-start" 
                 id="cvv" 
                 placeholder={t('cvvPlaceholder')}
-                value={cvv}
-                onChange={(e) => setCvv(e.target.value)}
+                value={appointmentData.cvv || ''}
+                onChange={(e) => updateAppointmentData({ cvv: e.target.value })}
                 maxLength={4}
                 required
               />
@@ -86,8 +113,8 @@ const PaymentSection = () => {
               className="form-control" 
               id="fullName" 
               placeholder={t('nameOnCardPlaceholder')}
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              value={appointmentData.cardholderName || ''}
+              onChange={(e) => updateAppointmentData({ cardholderName: e.target.value })}
               required
             />
           </div>
@@ -95,7 +122,7 @@ const PaymentSection = () => {
       );
     }
 
-    if (selectedPaymentMethod === 'stcpay') {
+    if (appointmentData.paymentMethod === 'stcpay') {
       return (
         <div className="text-start mb-3">
           <label htmlFor="mobile" className="form-label">رقم الجوال</label>
@@ -104,8 +131,8 @@ const PaymentSection = () => {
             className="form-control text-start" 
             id="mobile" 
             placeholder="05xxxxxxxx"
-            value={mobile}
-            onChange={(e) => setMobile(e.target.value)}
+            value={appointmentData.phoneNumber || ''}
+            onChange={(e) => updateAppointmentData({ phoneNumber: e.target.value })}
             required
           />
         </div>
@@ -136,7 +163,10 @@ const PaymentSection = () => {
             <p className="text-body-secondary m-0">{t('paymentDesc')}</p>
           </div>
 
-          <a href="#" className="btn btn-outline-primary">
+          <a href="#" className="btn btn-outline-primary" onClick={(e) => {
+            e.preventDefault();
+            setCurrentSection('my-reservations');
+          }}>
             {t('myReservations')}
           </a>
         </div>
@@ -149,8 +179,8 @@ const PaymentSection = () => {
               <label className="form-label">طريقة الدفع</label>
               <select 
                 className="form-select"
-                value={selectedPaymentMethod}
-                onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+                value={appointmentData.paymentMethod}
+                onChange={(e) => updateAppointmentData({ paymentMethod: e.target.value })}
                 required
               >
                 {Object.entries(paymentMethods.methods).map(([key, method]) => (
@@ -164,8 +194,19 @@ const PaymentSection = () => {
 
           {renderPaymentFields()}
     
-          <button type="submit" className="btn btn-primary w-100">
-            {t('pay')}
+          <button 
+            type="submit" 
+            className="btn btn-primary w-100"
+            disabled={submitting}
+          >
+            {submitting ? (
+              <>
+                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                جاري إنشاء الحجز...
+              </>
+            ) : (
+              t('pay')
+            )}
           </button>
 
           <div className="text-body-tertiary text-center p-3">

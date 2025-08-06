@@ -86,3 +86,73 @@ export interface AdditionalService {
   updated_at: string;
   loyalty_points: number;
 }
+
+export interface Reservation {
+  id: string;
+  status: 'new' | 'going_to_customer' | 'arrived_at_customer' | 'washing_in_progress' | 'completed' | 'cancelled';
+  serviceName: string;
+  dateTime: string;
+  price?: number;
+  location?: string;
+  vehicleInfo?: string;
+  completedAt?: string;
+  cancelledAt?: string;
+  cancellationReason?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Product {
+  id: number;
+  status: string;
+  quantity: string;
+  name: string;
+  description: string;
+  price: string;
+  promo_price: string;
+  currency: string;
+  thumbnail: string;
+  product_link: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TransactionDetails {
+  id: string;
+  date: string;
+  time: string;
+  totalAmount: number;
+  additionalServices: number;
+  serviceName: string;
+  status: string;
+  paymentMethod: string;
+}
+
+export interface AppointmentData {
+  // Personal Data
+  name: string;
+  phoneNumber: string;
+  address: string;
+  carLocation: string;
+  zone: string;
+  
+  // Vehicle Information
+  vehicleBrand: string;
+  vehicleColor: string;
+  plateNumber: string;
+  notes?: string;
+  vehicleImage?: File;
+  
+  // Service Information
+  serviceType: string;
+  appointmentDate: string;
+  appointmentTime: string;
+  additionalServices: number[];
+  
+  // Payment Information
+  paymentMethod: string;
+  cardNumber?: string;
+  expiryDate?: string;
+  cvv?: string;
+  cardholderName?: string;
+}

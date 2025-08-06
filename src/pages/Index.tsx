@@ -12,6 +12,7 @@ import ServiceSection from '../components/ServiceSection';
 import PaymentSection from '../components/PaymentSection';
 import PaymentSuccessSection from '../components/PaymentSuccessSection';
 import Footer from '../components/Footer';
+import MyReservationsSection from '../components/MyReservationsSection';
 
 const AppContent = () => {
   const { isRTL } = useLanguage();
@@ -63,6 +64,8 @@ const AppContent = () => {
         return <PaymentSection />;
       case 'payment-success':
         return <PaymentSuccessSection />;
+      case 'my-reservations':
+        return <MyReservationsSection />;
       default:
         return <ProjectReservationsSection />;
     }

@@ -60,6 +60,7 @@ export const DataProvider: React.FC<DataProviderProps> = ({ children }) => {
         apiService.getPaymentMethods()
       ]);
 
+      // استخدام البيانات حتى لو كانت من fallback
       if (colorsResponse.status) {
         setVehicleColors(colorsResponse.data.vehicle_colors);
       }

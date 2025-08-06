@@ -101,7 +101,33 @@ const translations = {
     // Language
     language: 'اللغة',
     arabic: 'العربية',
-    english: 'English'
+    english: 'English',
+    
+    // مفاتيح إضافية للنماذج
+    selectCarLocation: 'اختر موقع السيارة',
+    selectZone: 'اختر المنطقة',
+    selectBrand: 'اختر الماركة',
+    selectColor: 'اختر اللون',
+    selectServiceType: 'اختر نوع الخدمة',
+    loadingDates: 'جاري تحميل التواريخ...',
+    loadingTimes: 'جاري تحميل الأوقات...',
+    selectDateFirst: 'اختر التاريخ أولاً',
+    
+    // My Reservations Section
+    upcomingReservations: 'الحجوزات القادمة',
+    previousReservations: 'الحجوزات السابقة',
+    newBooking: 'طلب حجز جديد',
+    backToHome: 'العودة الى الرئيسية',
+    loadingReservations: 'جاري تحميل الحجوزات...',
+    newStatus: 'جديدة',
+    goingToCustomerStatus: 'ذهاب للعميل',
+    arrivedAtCustomerStatus: 'الوصول للعميل',
+    washingInProgressStatus: 'جاري الغسيل',
+    completedStatus: 'مكتملة',
+    cancelledStatus: 'ملغية',
+    dailyWashPackage: 'باقة الغسيل اليومي',
+    noUpcomingReservations: 'لا توجد حجوزات قادمة',
+    noPreviousReservations: 'لا توجد حجوزات سابقة',
   },
   en: {
     // Header
@@ -193,7 +219,33 @@ const translations = {
     // Language
     language: 'Language',
     arabic: 'العربية',
-    english: 'English'
+    english: 'English',
+    
+    // Extra keys for forms
+    selectCarLocation: 'Select Car Location',
+    selectZone: 'Select Zone',
+    selectBrand: 'Select Brand',
+    selectColor: 'Select Color',
+    selectServiceType: 'Select Service Type',
+    loadingDates: 'Loading dates...',
+    loadingTimes: 'Loading times...',
+    selectDateFirst: 'Select date first',
+    
+    // My Reservations Section
+    upcomingReservations: 'Upcoming Reservations',
+    previousReservations: 'Previous Reservations',
+    newBooking: 'Request New Booking',
+    backToHome: 'Return to Home',
+    loadingReservations: 'Loading reservations...',
+    newStatus: 'New',
+    goingToCustomerStatus: 'Going to customer',
+    arrivedAtCustomerStatus: 'Arrived at customer',
+    washingInProgressStatus: 'Washing in progress',
+    completedStatus: 'Completed',
+    cancelledStatus: 'Cancelled',
+    dailyWashPackage: 'Daily Wash Package',
+    noUpcomingReservations: 'No upcoming reservations',
+    noPreviousReservations: 'No previous reservations',
   }
 };
 
